@@ -1,7 +1,13 @@
 import React, { useState } from "react";
+import ContactsList from "./ContactsList";
+import inputs from "../constant/input";
+import { v4 } from "uuid";
 
 function Contacts() {
+  const [contacts, setContacts] = useState([]);
+  const [alert, setAlert] = useState("");
   const [contact, setContact] = useState({
+    id: "",
     name: "",
     lastName: "",
     email: "",
@@ -20,43 +26,38 @@ function Contacts() {
       !contact.email ||
       !contact.phone
     ) {
-      alert("please enter valid data");
+      setAlert("please enter valid data");
       return;
     }
+    setAlert("");
+
+    const newContact = { ...contact, id: v4() };
+    setContacts((contacts) => [...contacts, newContact]);
+    setContact({
+      name: "",
+      lastName: "",
+      email: "",
+      phone: "",
+    });
   };
   return (
     <div>
       <div>
-        <input
-          type="text"
-          placeholder="Name..."
-          name="name"
-          value={contact.name}
-          onChange={changeHandler}
-        />
-        <input
-          type="text"
-          placeholder="Last Name"
-          name="lastName..."
-          value={contact.lastName}
-          onChange={changeHandler}
-        />
-        <input
-          type="email"
-          placeholder="Email..."
-          name="email"
-          value={contact.email}
-          onChange={changeHandler}
-        />
-        <input
-          type="number"
-          placeholder="Number..."
-          name="phone"
-          value={contact.phone}
-          onChange={changeHandler}
-        />
+        {inputs.map((input, index) => (
+          <input
+            key={index}
+            type={input.type}
+            placeholder={input.placeholder}
+            name={input.name}
+            value={contact[input.name]}
+            onChange={changeHandler}
+          />
+        ))}
+
         <button onClick={addHandler}>Add Contact</button>
       </div>
+      <div>{alert && <p>{alert}</p>}</div>
+      <ContactsList contacts={contacts} />
     </div>
   );
 }
