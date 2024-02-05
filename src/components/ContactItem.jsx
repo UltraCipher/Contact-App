@@ -1,6 +1,12 @@
-function ContactItem({ data: { id, name, lastName, email, phone } }) {
+import React from "react";
+import styles from "./ContactItem.module.css";
+
+function ContactItem({
+  data: { id, name, lastName, email, phone },
+  deleteHandler,
+}) {
   return (
-    <li key={id}>
+    <li className={styles.item}>
       <p>
         {name} {lastName}
       </p>
@@ -12,7 +18,7 @@ function ContactItem({ data: { id, name, lastName, email, phone } }) {
         <span>📞</span>
         {phone}
       </p>
-      <button>🗑️</button>
+      <button onClick={() => deleteHandler(id)}>🗑️</button>
     </li>
   );
 }
